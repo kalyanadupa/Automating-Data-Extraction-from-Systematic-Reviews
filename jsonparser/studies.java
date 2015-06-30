@@ -5,6 +5,9 @@
  */
 package jsonparser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author aka324
@@ -38,8 +41,17 @@ public class studies {
     
     public void parseParticipants(){
         String str = this.participants;
-        str.replaceAll("\\•", ".");
-        System.out.println(str);
+        String[] tokens = str.split("(?<!\\d)\\.(?!\\d)|(?<=[A-Za-z0-9]\\d)\\.(?=\\s)"); 
+        List<String> keys = new ArrayList<String>();
+        for (String p : tokens) {
+            if ((!p.matches("\\s+")) && (!p.equalsIgnoreCase(""))) {
+                if (p.contains(":")) {
+                    String[] tokens1 = p.split(":");
+                    keys.add(tokens1[0]);
+                }
+            }
+        }
+        System.out.println(keys.toString());
     }
     
 }

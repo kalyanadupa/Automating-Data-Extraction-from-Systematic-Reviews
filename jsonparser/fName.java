@@ -18,7 +18,9 @@ public class fName {
     
     public void printFName(){
         System.out.println("Filename: " + this.fileName); 
-        for(studies st : stuL)
+        for(studies st : stuL){
             st.print();
+            st.parseParticipants();
+        }    
    }
 }
