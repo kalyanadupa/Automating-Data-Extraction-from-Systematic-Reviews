@@ -45,20 +45,38 @@ public class studies {
         String str = this.participants;
         String[] tokens = str.split("(?<!\\d)\\.(?!\\d)|(?<=[A-Za-z0-9]\\d)\\.(?=\\s)"); 
         List<String> keys = new ArrayList<String>();
-        for (String p : tokens) {
-            if ((!p.matches("\\s+")) && (!p.equalsIgnoreCase(""))) {
-                if (p.contains(":")) {
-                    String[] tokens1 = p.split(":");
-                    for (int i = 0; i < tokens1.length - 1; i++) {
+        for(String p : tokens){
+            if((!p.matches("\\s+")) && (!p.equalsIgnoreCase(""))){
+                // Code for extracting keys
+//                System.out.println(p);
+                Pattern regex = Pattern.compile(
+                        ":         # Match a colon\n"
+                        + "(?!       # only if it's not followed by...\n"
+                        + " [^(]*    #   any number of characters except opening parens\n"
+                        + " \\)      #   followed by a closing parens\n"
+                        + ")         # End of lookahead",
+                        Pattern.COMMENTS);
+                Matcher colon = regex.matcher(p);
+                if(colon.find()){
+                    String[] tokens1 = p.split(":(?![^(]*\\))");
+                    for(int i  = 0; i < tokens1.length - 1 ; i++){
                         String innerTokens = tokens1[i];
-                        Matcher matcher = Pattern.compile("([A-Z].*)").matcher(innerTokens);
-                        if (matcher.find()) {
+                        innerTokens = innerTokens.substring(innerTokens.lastIndexOf(",") + 1);
+                        Matcher matcher;
+                        if(innerTokens.contains("CRITERIA"))
+                            matcher = Pattern.compile("((\\w+\\s*){1,2})$").matcher(innerTokens);
+                        else
+                            matcher = Pattern.compile("(\\b[A-Z](?![^(]*\\))(?!.*\\b[A-Z](?![^(]*\\))).*)").matcher(innerTokens);
+                        if(matcher.find()) {
                             keys.add(matcher.group(1));
                         }
+                        else{
+                            keys.add(innerTokens);
+                        }
                     }
-
-                }
-            }
+                    
+                }  
+            }    
         }
         System.out.println(keys.toString());
     }
