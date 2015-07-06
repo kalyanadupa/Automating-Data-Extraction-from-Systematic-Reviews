@@ -7,6 +7,8 @@ package jsonparser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -47,7 +49,14 @@ public class studies {
             if ((!p.matches("\\s+")) && (!p.equalsIgnoreCase(""))) {
                 if (p.contains(":")) {
                     String[] tokens1 = p.split(":");
-                    keys.add(tokens1[0]);
+                    for (int i = 0; i < tokens1.length - 1; i++) {
+                        String innerTokens = tokens1[i];
+                        Matcher matcher = Pattern.compile("([A-Z].*)").matcher(innerTokens);
+                        if (matcher.find()) {
+                            keys.add(matcher.group(1));
+                        }
+                    }
+
                 }
             }
         }
