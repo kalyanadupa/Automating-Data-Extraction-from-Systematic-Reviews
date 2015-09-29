@@ -13,7 +13,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -99,6 +102,7 @@ public class jsonP {
             }
             else if (ptr.equalsIgnoreCase("Label")) {
                 currSt.label = LabelL.get(0);
+                LabelL.remove(0);
                 stuL.add(currSt);
                 currSt = new studies();
             }
@@ -111,15 +115,80 @@ public class jsonP {
                 currFN = new fName();
             }
         }
+        //Uncomment the following for loop to print data structure
         
-        for(fName tempFN : fnL){
-            tempFN.printFName();
+//        for(fName tempFN : fnL){
+//            tempFN.printFName();
+//        }
+        
+        
+        //Keys Print Code starts
+        
+//        HashMap<String, Integer> pKList = new HashMap<String, Integer>();
+//        HashMap<String, Integer> iKList = new HashMap<String, Integer>();
+//        HashMap<String, Integer> mKList = new HashMap<String, Integer>();
+//        HashMap<String, Integer> oKList = new HashMap<String, Integer>();
+//        
+//        for(fName tempFN : fnL){
+//            tempFN.printAllKeys(pKList,iKList,mKList,oKList);
+//        }
+//        
+//        for (Map.Entry<String, Integer> entry : pKList.entrySet()) {
+//            System.out.println(entry.getKey()+ "\t"+entry.getValue()+"\t" + "Participants");
+//        }
+//        for (Map.Entry<String, Integer> entry : oKList.entrySet()) {
+//            System.out.println(entry.getKey()+ "\t"+entry.getValue()+"\t" + "Outcomes");
+//        }
+//        for (Map.Entry<String, Integer> entry : mKList.entrySet()) {
+//            System.out.println(entry.getKey()+ "\t"+entry.getValue()+"\t" + "Methods");
+//        }
+//        for (Map.Entry<String, Integer> entry : iKList.entrySet()) {
+//            System.out.println(entry.getKey()+ "\t"+entry.getValue()+"\t" + "Intervention");
+//        }
+        
+        
+        
+        //Keys Print Code ends
+        
+        //Inclusion Exclusion code starts here
+        
+        List<String> incl = new ArrayList<String>();
+        List<String> excl = new ArrayList<String>();
+        for (fName tempFN : fnL) {
+            List<studies> stuL1 = tempFN.stuL;
+            for(studies st : stuL1){
+                System.out.println("<doc>");
+                System.out.println("<label>"+st.label+"</label>");
+                incl = new ArrayList<String>();
+                excl = new ArrayList<String>();
+                st.parseCriteria(incl,excl);
+                if(!incl.isEmpty()){
+                    for (String p : incl) {
+                        System.out.println("<inclusion>"+p+"</inclusion>");
+                    }
+                }    
+                if(!excl.isEmpty()){
+                    for (String p : excl) {
+                        System.out.println("<exclusion>"+p+"</exclusion>");
+                    }
+                }
+                System.out.println("</doc>");
+            }
         }
+//        System.out.println("Inclusion Criteria \n ==== \n");
+//        for(String p : incl)
+//            System.out.println(p);
+//        
+//        System.out.println("\nExclusion Criteria \n ==== \n");
+//        for(String p : excl)
+//            System.out.println(p);
+        
+        //Inclusion Exclusion code ends here 
+        
+        
         // Just method to check if everything is parsed
         if((MethodsL.size() + InterventionsL.size() + OutcomesL.size() + ParticipantsL.size() + FilenameL.size()) != 0)
-            System.out.println("ERROR : Something not parsed");
-        
-        
+            System.out.println("ERROR : Something not parsed");        
     }
     
     

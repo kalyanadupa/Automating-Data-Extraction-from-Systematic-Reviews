@@ -6,6 +6,7 @@
 package jsonparser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,11 +20,15 @@ public class fName {
     public void printFName(){
         System.out.println("Filename: " + this.fileName); 
         for(studies st : stuL){
-            //st.print();
-            
-            System.out.println("\n" + st.participants);
-            st.parseParticipants();
-            System.out.println("");
+            st.print();
         }    
    }
+    
+    
+    public void printAllKeys(HashMap<String, Integer> pKList,HashMap<String, Integer> iKList,HashMap<String, Integer> mKList,HashMap<String, Integer> oKList) {
+        System.out.println("Filename: " + this.fileName);
+        for (studies st : stuL) {
+            st.getKeys(pKList, iKList, mKList, oKList);
+        }
+    } 
 }
