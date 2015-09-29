@@ -175,13 +175,7 @@ public class jsonP {
                 System.out.println("</doc>");
             }
         }
-//        System.out.println("Inclusion Criteria \n ==== \n");
-//        for(String p : incl)
-//            System.out.println(p);
-//        
-//        System.out.println("\nExclusion Criteria \n ==== \n");
-//        for(String p : excl)
-//            System.out.println(p);
+
         
         //Inclusion Exclusion code ends here 
         
