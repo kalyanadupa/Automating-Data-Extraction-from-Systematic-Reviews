@@ -152,29 +152,29 @@ public class jsonP {
         
         //Inclusion Exclusion code starts here
         
-        List<String> incl = new ArrayList<String>();
-        List<String> excl = new ArrayList<String>();
-        for (fName tempFN : fnL) {
-            List<studies> stuL1 = tempFN.stuL;
-            for(studies st : stuL1){
-                System.out.println("<doc>");
-                System.out.println("<label>"+st.label+"</label>");
-                incl = new ArrayList<String>();
-                excl = new ArrayList<String>();
-                st.parseCriteria(incl,excl);
-                if(!incl.isEmpty()){
-                    for (String p : incl) {
-                        System.out.println("<inclusion>"+p+"</inclusion>");
-                    }
-                }    
-                if(!excl.isEmpty()){
-                    for (String p : excl) {
-                        System.out.println("<exclusion>"+p+"</exclusion>");
-                    }
-                }
-                System.out.println("</doc>");
-            }
-        }
+//        List<String> incl = new ArrayList<String>();
+//        List<String> excl = new ArrayList<String>();
+//        for (fName tempFN : fnL) {
+//            List<studies> stuL1 = tempFN.stuL;
+//            for(studies st : stuL1){
+//                System.out.println("<doc>");
+//                System.out.println("<label>"+st.label+"</label>");
+//                incl = new ArrayList<String>();
+//                excl = new ArrayList<String>();
+//                st.parseCriteria(incl,excl);
+//                if(!incl.isEmpty()){
+//                    for (String p : incl) {
+//                        System.out.println("<inclusion>"+p+"</inclusion>");
+//                    }
+//                }    
+//                if(!excl.isEmpty()){
+//                    for (String p : excl) {
+//                        System.out.println("<exclusion>"+p+"</exclusion>");
+//                    }
+//                }
+//                System.out.println("</doc>");
+//            }
+//        }
 
         
         //Inclusion Exclusion code ends here 
