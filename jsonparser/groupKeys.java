@@ -38,11 +38,13 @@ public class groupKeys {
                             k.gKey.add(p);
                             k.freq = k.freq +p.freq;
                             removeList.add(p);
+                            System.out.println("Grouped IC " + k.name +"("+k.freq+")" +" <- " + p.name+"("+p.freq+")");
                         }
                         if(k.freq < p.freq){
                             p.gKey.add(k);
                             p.freq = k.freq +p.freq;
                             removeList.add(k);
+                            System.out.println("Grouped IC " + p.name+"("+p.freq+")" +" <- " + k.name+"("+k.freq+")");
                         }   
                     }
                 }
@@ -54,26 +56,43 @@ public class groupKeys {
             else
                 System.out.println("Error"+x.name);
         }
-        System.out.println("Done");
         
         CosineSimilarity cs = new CosineSimilarity();
         for(int i = 0; i < temp.size();i++){
             for(int j = i+1; j < temp.size();j++){
                 double sim = cs.CosineSimilarity_Score(temp.get(i).name,temp.get(j).name);
                 int ed = minDistance(temp.get(i).name,temp.get(j).name);
-//                if(sim > 0.7){ // attempt1
-//                    if((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))){
-//                        System.out.println("Grouped "+temp.get(i).name +"("+temp.get(i).freq+"}" + " <- "+ temp.get(j).name+"("+temp.get(j).freq+"}");
-//                    } 
-//                    else if((temp.get(i).freq < temp.get(j).freq) && (temp.get(j).category.contains(temp.get(i).category))){
-//                        System.out.println("Grouped "+temp.get(j).name+"("+temp.get(j).freq+"}" + " <- "+ temp.get(i).name+"("+temp.get(i).freq+"}");
-//                    }
-//                }
-                if(ed == 2){
-                    System.out.println(temp.get(i).name+","+temp.get(j).name);
+                if(ed == 1){
+                    if ((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))) {
+                        temp.get(i).gKey.add(temp.get(j));
+                        System.out.println("Grouped ED " + temp.get(i).name+"("+temp.get(i).freq+")" +" <- " + temp.get(j).name+"("+temp.get(j).freq+")");
+                    } else if ((temp.get(i).freq < temp.get(j).freq) && (temp.get(j).category.contains(temp.get(i).category))) {
+                        temp.get(j).gKey.add(temp.get(i));
+                        System.out.println("Grouped ED " + temp.get(j).name+"("+temp.get(j).freq+")" +" <- " + temp.get(i).name+"("+temp.get(i).freq+")");
+                    }
                 }
-                    
+                else if(sim > 0.7){
+                    if((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))){
+                        temp.get(i).gKey.add(temp.get(j));
+                        System.out.println("Grouped SIM " + temp.get(i).name+"("+temp.get(i).freq+")" +" <- " + temp.get(j).name+"("+temp.get(j).freq+")");
+                    } 
+                    else if((temp.get(i).freq < temp.get(j).freq) && (temp.get(j).category.contains(temp.get(i).category))){
+                        temp.get(j).gKey.add(temp.get(i));
+                        System.out.println("Grouped SIM " + temp.get(j).name+"("+temp.get(j).freq+")" +" <- " + temp.get(i).name+"("+temp.get(i).freq+")");
+                    }
+                }
+                
             }
+        }
+        
+        for(Key k : temp){
+            if(!k.gKey.isEmpty()){
+                System.out.print(k.name + " <- ");
+                for(Key p : k.gKey)
+                    System.out.print( p.name +", ");
+                System.out.println("");
+            }
+            
         }
     }
     
