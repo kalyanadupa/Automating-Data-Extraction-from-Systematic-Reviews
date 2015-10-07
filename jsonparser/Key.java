@@ -17,7 +17,7 @@ public class Key {
     int freq;
     String category;
     int words;
-    List<Key> gKey;
+    public List<Key> gKey;
     
     public Key(String name1, int freq1, String category1,int words1){
         this.name = name1;
@@ -26,5 +26,9 @@ public class Key {
         this.words = words1;
         this.gKey = new ArrayList<Key>();
         
+    }
+    public Key(String name1){
+        this.name = name1;
+        this.gKey = new ArrayList<Key>();
     }
 }
