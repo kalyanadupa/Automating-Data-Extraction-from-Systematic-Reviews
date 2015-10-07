@@ -9,14 +9,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  *
  * @author Abhishek
  */
-public class printKeys {
+public class printKeyPair {
     public static void main(String[] argsv) throws FileNotFoundException, IOException {
         List<Key> temp = new ArrayList<Key>();
 
@@ -37,13 +37,11 @@ public class printKeys {
                             k.gKey.add(p);
                             k.freq = k.freq + p.freq;
                             removeList.add(p);
-                            System.out.println("Grouped " + k.name + "(" + k.freq + ")" + " <- " + p.name + "(" + p.freq + ")");
                         }
                         if (k.freq < p.freq) {
                             p.gKey.add(k);
                             p.freq = k.freq + p.freq;
-                            removeList.add(k);
-                            System.out.println("Grouped " + p.name + "(" + p.freq + ")" + " <- " + k.name + "(" + k.freq + ")");
+                            removeList.add(k);                            
                         }
                     }
                 }
@@ -62,36 +60,11 @@ public class printKeys {
             for (int j = i + 1; j < temp.size(); j++) {
                 double sim = cs.CosineSimilarity_Score(temp.get(i).name, temp.get(j).name);
                 int ed = minDistance(temp.get(i).name, temp.get(j).name);
-                if (ed == 1) {
-                    if ((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))) {
-                        temp.get(i).gKey.add(temp.get(j));
-                        System.out.println("Grouped " + temp.get(i).name + "(" + temp.get(i).freq + ")" + " <- " + temp.get(j).name + "(" + temp.get(j).freq + ")");
-                    } else if ((temp.get(i).freq < temp.get(j).freq) && (temp.get(j).category.contains(temp.get(i).category))) {
-                        temp.get(j).gKey.add(temp.get(i));
-                        System.out.println("Grouped " + temp.get(j).name + "(" + temp.get(j).freq + ")" + " <- " + temp.get(i).name + "(" + temp.get(i).freq + ")");
-                    }
-                } else if (sim > 0.7) {
-                    if ((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))) {
-                        temp.get(i).gKey.add(temp.get(j));
-                        System.out.println("Grouped " + temp.get(i).name + "(" + temp.get(i).freq + ")" + " <- " + temp.get(j).name + "(" + temp.get(j).freq + ")");
-                    } else if ((temp.get(i).freq < temp.get(j).freq) && (temp.get(j).category.contains(temp.get(i).category))) {
-                        temp.get(j).gKey.add(temp.get(i));
-                        System.out.println("Grouped " + temp.get(j).name + "(" + temp.get(j).freq + ")" + " <- " + temp.get(i).name + "(" + temp.get(i).freq + ")");
-                    }
-                }
-
+                if(temp.get(i).freq > temp.get(j).freq)
+                    System.out.println(temp.get(i).name+"\t"+temp.get(j).name+"\t"+sim+"\t"+ed);
+                else
+                    System.out.println(temp.get(j).name+"\t"+temp.get(i).name+"\t"+sim+"\t"+ed);
             }
-        }
-
-        for (Key k : temp) {
-            if (!k.gKey.isEmpty()) {
-                System.out.print(k.name + " <- ");
-                for (Key p : k.gKey) {
-                    System.out.print(p.name + ", ");
-                }
-                System.out.println("");
-            }
-
         }
     }
 
