@@ -27,6 +27,14 @@ public class Key {
         this.gKey = new ArrayList<Key>();
         
     }
+    public Key(String name1, int freq1){
+        this.name = name1;
+        this.freq = freq1;
+        this.category = "";
+        this.words = 0;
+        this.gKey = new ArrayList<Key>();
+        
+    }
     public Key(String name1){
         this.name = name1;
         this.gKey = new ArrayList<Key>();
