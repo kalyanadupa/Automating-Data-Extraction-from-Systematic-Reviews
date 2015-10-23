@@ -18,6 +18,7 @@ public class Key {
     String category;
     int words;
     public List<Key> gKey;
+    String groupedKeys;
     
     public Key(String name1, int freq1, String category1,int words1){
         this.name = name1;
@@ -26,6 +27,16 @@ public class Key {
         this.words = words1;
         this.gKey = new ArrayList<Key>();
         
+    }
+    public Key(String name1, String category1,String groupedKeys1){
+        this.name = name1;
+        this.category = category1;
+        this.groupedKeys =groupedKeys1;
+    }
+    public Key(String name1, String category1){
+        this.name = name1;
+        this.category = category1;
+        this.groupedKeys = "";
     }
     public Key(String name1, int freq1){
         this.name = name1;

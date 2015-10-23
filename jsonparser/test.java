@@ -30,6 +30,13 @@ import java.util.regex.Pattern;
 public class test {
     
     public static void main(String argsv[]) throws FileNotFoundException, IOException{
+        String x = "Intention-to-treat: yes. (An intention-to-treat analysis was performed for all participants who had carotid ultrasonography at baseline and at least one follow-up visit, p.731)";
+        
+        System.out.println(x.substring(0, x.indexOf(":")));
+        System.out.println(x.substring(x.indexOf(":")+1,x.length() ));
+        
+        
+        
         String str = "Ethnic: Chinese 100 patients (50 in shengmai group, M/F 30/20, mean age 58 years, duration of heart failure 4.8 years, heart function class 2/3/4: 10/35/5; 50 in control group, M/F 29/21, mean age 60 years, duration of heart failure 4.9 years, heart fuction class 2/3/4: 10/36/4) Setting: inpatients Diagnostic criteria: heart function class based NYHA class Exclusion criteria: not stated";
         if((str.toLowerCase().contains("inclusion criteria")) && (str.toLowerCase().contains("exclusion criteria"))){
             Matcher matcher;
