@@ -13,7 +13,7 @@ import org.json.simple.parser.ParseException;
  *
  * @author aka324
  */
-class KeyFinder implements ContentHandler{
+public class KeyFinder implements ContentHandler{
   private Object value;
   private boolean found = false;
   private boolean end = false;

@@ -16,12 +16,12 @@ import java.util.regex.Pattern;
  * @author aka324
  */
 public class studies {
-    String method;
-    String interventions;
-    String notes;
-    String outcomes;
-    String participants;  
-    String label;
+    public String method;
+    public String interventions;
+    public String notes;
+    public String outcomes;
+    public String participants;  
+    public String label;
     
     public studies(){
         this.method = "";

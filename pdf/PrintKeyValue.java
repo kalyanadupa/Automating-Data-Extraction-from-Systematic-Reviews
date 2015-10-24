@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jsonparser;
+package pdf;
 
+import jsonparser.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,7 +25,7 @@ import org.json.simple.parser.ParseException;
  *
  * @author aka324
  */
-public class jsonP {
+public class PrintKeyValue {
     
     public static void main(String argsv[]) throws FileNotFoundException, IOException, ParseException{
         //results_cochrane_HF.json
@@ -120,65 +121,6 @@ public class jsonP {
         for(fName tempFN : fnL){
             tempFN.printFName();
         }
-        
-        
-        //Keys Print Code starts
-        
-//        HashMap<String, Integer> pKList = new HashMap<String, Integer>();
-//        HashMap<String, Integer> iKList = new HashMap<String, Integer>();
-//        HashMap<String, Integer> mKList = new HashMap<String, Integer>();
-//        HashMap<String, Integer> oKList = new HashMap<String, Integer>();
-//        
-//        for(fName tempFN : fnL){
-//            tempFN.printAllKeys(pKList,iKList,mKList,oKList);
-//        }
-//        
-//        for (Map.Entry<String, Integer> entry : pKList.entrySet()) {
-//            System.out.println(entry.getKey()+ "\t"+entry.getValue()+"\t" + "Participants");
-//        }
-//        for (Map.Entry<String, Integer> entry : oKList.entrySet()) {
-//            System.out.println(entry.getKey()+ "\t"+entry.getValue()+"\t" + "Outcomes");
-//        }
-//        for (Map.Entry<String, Integer> entry : mKList.entrySet()) {
-//            System.out.println(entry.getKey()+ "\t"+entry.getValue()+"\t" + "Methods");
-//        }
-//        for (Map.Entry<String, Integer> entry : iKList.entrySet()) {
-//            System.out.println(entry.getKey()+ "\t"+entry.getValue()+"\t" + "Intervention");
-//        }
-        
-        
-        
-        //Keys Print Code ends
-        
-        //Inclusion Exclusion code starts here
-        
-//        List<String> incl = new ArrayList<String>();
-//        List<String> excl = new ArrayList<String>();
-//        for (fName tempFN : fnL) {
-//            List<studies> stuL1 = tempFN.stuL;
-//            for(studies st : stuL1){
-//                System.out.println("<doc>");
-//                System.out.println("<label>"+st.label+"</label>");
-//                incl = new ArrayList<String>();
-//                excl = new ArrayList<String>();
-//                st.parseCriteria(incl,excl);
-//                if(!incl.isEmpty()){
-//                    for (String p : incl) {
-//                        System.out.println("<inclusion>"+p+"</inclusion>");
-//                    }
-//                }    
-//                if(!excl.isEmpty()){
-//                    for (String p : excl) {
-//                        System.out.println("<exclusion>"+p+"</exclusion>");
-//                    }
-//                }
-//                System.out.println("</doc>");
-//            }
-//        }
-
-        
-        //Inclusion Exclusion code ends here 
-        
         
         // Just method to check if everything is parsed
         if((MethodsL.size() + InterventionsL.size() + OutcomesL.size() + ParticipantsL.size() + FilenameL.size()) != 0)

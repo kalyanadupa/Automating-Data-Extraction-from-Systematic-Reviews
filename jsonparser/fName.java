@@ -14,8 +14,8 @@ import java.util.List;
  * @author aka324
  */
 public class fName {
-    List<studies> stuL = new ArrayList<studies>();
-    String fileName;
+    public List<studies> stuL = new ArrayList<studies>();
+    public String fileName;
     
     public void printFName(){
         System.out.println("Filename: " + this.fileName); 
