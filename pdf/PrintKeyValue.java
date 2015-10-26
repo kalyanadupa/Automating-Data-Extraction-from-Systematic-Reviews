@@ -10,14 +10,18 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.util.PDFTextStripper;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -116,9 +120,159 @@ public class PrintKeyValue {
                 currFN = new fName();
             }
         }
-        //Uncomment the following for loop to print data structure
+        
+        int op = 0,ip = 0;
         
         for(fName tempFN : fnL){
+            //tempFN.printFName();
+            // Write the PDF file text to a text file
+            PDDocument pd;
+            BufferedWriter wr;
+            try {
+                File input = new File(tempFN.fileName);
+                File output = new File("SampleText.txt");
+                pd = PDDocument.load(input);
+                PDFTextStripper stripper = new PDFTextStripper();
+                wr = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output)));
+                stripper.writeText(pd, wr);
+                if (pd != null) {
+                    pd.close();
+                }
+                wr.close();
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+            // Read the text file and start processing
+            boolean meth = false;
+            boolean part = false;
+            boolean inter = false;
+            boolean out = false;
+            boolean not = false;
+            boolean lab = false;
+            
+            for(int i = 0; i < tempFN.stuL.size(); i++){
+                BufferedReader br = new BufferedReader(new FileReader(new File("SampleText.txt")));
+                line = "";
+                while ((line = br.readLine()) != null) {
+                    if (line.equalsIgnoreCase(tempFN.stuL.get(i).label)) {
+                        lab = true;
+                    }
+                    if (i + 1 < tempFN.stuL.size()) {
+                        if (line.equalsIgnoreCase(tempFN.stuL.get(i + 1).label)) {
+                            lab = false;
+                            break;
+                        }
+                    }
+                    if(lab){
+                        if (line.startsWith("Methods ")) {
+                            meth = true;
+                            part = false;
+                            inter = false;
+                            out = false;
+                            not = false;
+                            String find = line.substring(line.indexOf(" ") + 1, line.length());
+                            String nL = tempFN.stuL.get(i).method;
+                            try{
+                                tempFN.stuL.get(i).method = new StringBuffer(nL).insert(nL.indexOf(find)+find.length(), "#$#").toString();
+                            }
+                            catch(Exception ex){
+                                System.out.println("** Error **");
+                                System.out.println("Find - " + find);
+                                System.out.println("nL - " + nL);
+                            }
+                            
+                        } else if (line.startsWith("Participants ")) {
+                            part = true;
+                            meth = false;
+                            inter = false;
+                            out = false;
+                            not = false;
+                            String find = line.substring(line.indexOf(" ") + 1, line.length());
+                            String nL = tempFN.stuL.get(i).participants;
+                            try {
+                                tempFN.stuL.get(i).participants = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                            } catch (Exception ex) {
+                                System.out.println("** Error **");
+                                System.out.println("Find - " + find);
+                                System.out.println("nL - " + nL);
+                            }
+                        } else if (line.startsWith("Interventions ")) {
+                            meth = false;
+                            part = false;
+                            inter = true;
+                            out = false;
+                            not = false;
+                            String find = line.substring(line.indexOf(" ") + 1, line.length());
+                            String nL = tempFN.stuL.get(i).interventions;
+                            try {
+                                tempFN.stuL.get(i).interventions = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                            } catch (Exception ex) {
+                                System.out.println("** Error **");
+                                System.out.println("Find - " + find);
+                                System.out.println("nL - " + nL);
+                            }
+                            
+                        } else if (line.startsWith("Outcomes ")) {
+                            meth = false;
+                            part = false;
+                            inter = false;
+                            out = true;
+                            not = false;
+                            String find = line.substring(line.indexOf(" ") + 1, line.length());
+                            String nL = tempFN.stuL.get(i).outcomes;
+                            try{
+                                tempFN.stuL.get(i).outcomes = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                            }
+                            catch(Exception ex){
+                                System.out.println("** Error **");
+                                System.out.println("Find - " +find);                                
+                                System.out.println("nL - " +nL);                                
+                            }
+                            
+                        } else if (line.startsWith("Notes ")) {
+                            meth = false;
+                            part = false;
+                            inter = false;
+                            out = false;
+                            not = true;
+                        }
+                        if(meth){
+                            String find = line;
+                            String nL = tempFN.stuL.get(i).method;
+                            if(nL.contains(find))
+                                tempFN.stuL.get(i).method = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                        } else if(part){
+                            String find = line;
+                            String nL = tempFN.stuL.get(i).participants;
+                            if (nL.contains(find)) {
+                                tempFN.stuL.get(i).participants = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                            }
+                        } else if(out){
+                            String find = line;
+                            String nL = tempFN.stuL.get(i).outcomes;
+                            if (nL.contains(find)) {
+                                tempFN.stuL.get(i).outcomes = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                            }
+                        } else if (inter) {
+                            String find = line;
+                            String nL = tempFN.stuL.get(i).interventions;
+                            if (nL.contains(find)) {
+                                tempFN.stuL.get(i).interventions = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                            }
+                        } 
+                    }
+                }
+                br.close();
+            }
+            
+            tempFN.printFName();
+        }
+        
+        // Printing DS
+        
+        for (fName tempFN : fnL) {
             tempFN.printFName();
         }
         
