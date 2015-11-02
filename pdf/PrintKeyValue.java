@@ -175,12 +175,16 @@ public class PrintKeyValue {
                             String find = line.substring(line.indexOf(" ") + 1, line.length());
                             String nL = tempFN.stuL.get(i).method;
                             try{
-                                tempFN.stuL.get(i).method = new StringBuffer(nL).insert(nL.indexOf(find)+find.length(), "#$#").toString();
+//                                System.out.println("oldM " + nL);
+//                                System.out.println("find " + find);
+                                if(nL.contains(find))
+                                    tempFN.stuL.get(i).method = new StringBuffer(nL).insert(nL.indexOf(find)+find.length(), "#$#").toString();
+//                                System.out.println("newL "+ tempFN.stuL.get(i).method);
                             }
                             catch(Exception ex){
-                                System.out.println("** Error **");
-                                System.out.println("Find - " + find);
-                                System.out.println("nL - " + nL);
+//                                System.out.println("** Error **");
+//                                System.out.println("Find - " + find);
+//                                System.out.println("nL - " + nL);
                             }
                             
                         } else if (line.startsWith("Participants ")) {
@@ -192,11 +196,13 @@ public class PrintKeyValue {
                             String find = line.substring(line.indexOf(" ") + 1, line.length());
                             String nL = tempFN.stuL.get(i).participants;
                             try {
-                                tempFN.stuL.get(i).participants = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                                if(nL.contains(find))
+                                    tempFN.stuL.get(i).participants = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                                
                             } catch (Exception ex) {
-                                System.out.println("** Error **");
-                                System.out.println("Find - " + find);
-                                System.out.println("nL - " + nL);
+//                                System.out.println("** Error **");
+//                                System.out.println("Find - " + find);
+//                                System.out.println("nL - " + nL);
                             }
                         } else if (line.startsWith("Interventions ")) {
                             meth = false;
@@ -207,11 +213,12 @@ public class PrintKeyValue {
                             String find = line.substring(line.indexOf(" ") + 1, line.length());
                             String nL = tempFN.stuL.get(i).interventions;
                             try {
-                                tempFN.stuL.get(i).interventions = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                                if(nL.contains(find))
+                                    tempFN.stuL.get(i).interventions = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
                             } catch (Exception ex) {
-                                System.out.println("** Error **");
-                                System.out.println("Find - " + find);
-                                System.out.println("nL - " + nL);
+//                                System.out.println("** Error **");
+//                                System.out.println("Find - " + find);
+//                                System.out.println("nL - " + nL);
                             }
                             
                         } else if (line.startsWith("Outcomes ")) {
@@ -223,12 +230,13 @@ public class PrintKeyValue {
                             String find = line.substring(line.indexOf(" ") + 1, line.length());
                             String nL = tempFN.stuL.get(i).outcomes;
                             try{
-                                tempFN.stuL.get(i).outcomes = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+                                if(nL.contains(find))
+                                    tempFN.stuL.get(i).outcomes = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
                             }
                             catch(Exception ex){
-                                System.out.println("** Error **");
-                                System.out.println("Find - " +find);                                
-                                System.out.println("nL - " +nL);                                
+//                                System.out.println("** Error **");
+//                                System.out.println("Find - " +find);                                
+//                                System.out.println("nL - " +nL);                                
                             }
                             
                         } else if (line.startsWith("Notes ")) {
@@ -239,10 +247,15 @@ public class PrintKeyValue {
                             not = true;
                         }
                         if(meth){
+                            
                             String find = line;
                             String nL = tempFN.stuL.get(i).method;
-                            if(nL.contains(find))
+                            if(nL.contains(find)){
+//                                System.out.println("oldM "+ nL);
+//                                System.out.println("find "+ find);
                                 tempFN.stuL.get(i).method = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "#$#").toString();
+//                                System.out.println("newM "+ tempFN.stuL.get(i).method);
+                            }
                         } else if(part){
                             String find = line;
                             String nL = tempFN.stuL.get(i).participants;
@@ -267,7 +280,7 @@ public class PrintKeyValue {
                 br.close();
             }
             
-            tempFN.printFName();
+            //tempFN.printFName();
         }
         
         // Printing DS
