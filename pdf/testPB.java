@@ -22,7 +22,7 @@ import org.apache.pdfbox.util.PDFTextStripper;
 public class testPB {
     
     public static void main(String[] args) {
-        String x = "(years)";
+        String x = "(years) \n hi hekk \n hosls";
 //        if ((!x.substring(0, 1).toUpperCase().matches(x.substring(0, 1)))) {
 //            System.out.println(" " + x);
 //        } else {

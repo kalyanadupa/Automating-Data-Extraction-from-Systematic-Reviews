@@ -8,6 +8,7 @@ package jsonparser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,18 +18,26 @@ import java.util.regex.Pattern;
  */
 public class studies {
     public String method;
+    public Map<String,String> mKeyV;
     public String interventions;
+    public Map<String,String> iKeyV;
     public String notes;
     public String outcomes;
-    public String participants;  
+    public Map<String,String> oKeyV;
+    public String participants;
+    public Map<String,String> pKeyV;
     public String label;
     
     public studies(){
         this.method = "";
+        this.mKeyV = new HashMap<String,String>();
         this.interventions = "";
+        this.iKeyV = new HashMap<String,String>();
         this.notes = "";
         this.outcomes = "";
+        this.oKeyV = new HashMap<String,String>();
         this.participants = "";
+        this.pKeyV = new HashMap<String,String>();
         this.label = "";
         
     }
