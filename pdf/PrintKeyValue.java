@@ -335,7 +335,7 @@ public class PrintKeyValue {
     
     public static void printKeyValues(String g,Map<String,String> KeyV) {
 
-        //String[] testC = {"n = 66 patients in Home-based CR group (33 in brief exercise programme subgroup<> & 33 inextended subgroup); n = 61 patients in Centre-based CR group (31 in brief<> subgroup & 30 in extended subgroup); 100% uncomplicated acute MI; mean age 52<> (SD 9); 100% male<> Inclusion: Uncomplicated AMI (elevated serum creatinine kinase or oxaloacetic transami- anase, prolonged chest pain consistent with AMI, new Q waves or evolutionary ST<> changes in ECG)<> Exclusion: Unable to undertake exercise test, congestive heart failure, unstable angina<> pectoris, valvular heart disease, atrial fibrillation, bundle branch block, history of by-<> pass, stroke, orthopaedic abnormalities, peripheral vascular disease, chronic pulmonary<> obstructive disease, obesity<>"};
+
         //merge
         String ptr = g;
         g = merge(ptr);
@@ -363,26 +363,26 @@ public class PrintKeyValue {
                         if (str.contains(":")) {
                             String[] inner = str.split(":");
                             if (inner.length >= 2) {
-                                System.out.println("Key-" + str.substring(0, str.indexOf(":")));
-                                System.out.println("Value-" + str.substring(str.indexOf(":") + 1, str.length()));
+                                System.out.println("**Key**\t" + str.substring(0, str.indexOf(":")));
+                                System.out.println("**Value**\t" + str.substring(str.indexOf(":") + 1, str.length()));
                             } else if (inner.length == 1) {
-                                System.out.println("Key-" + str.trim());
-                                System.out.print("Value-");
+                                System.out.println("**Key**\t" + str.trim());
+                                System.out.println("**Value**\t");
                             }
                         } else {
-                            System.out.println("Key-" + str.trim());
-                            System.out.print("Value-");
+                            System.out.println("**Key**\t" + str.trim());
+                            System.out.println("**Value**\t");
                         }
                     } else {
                         String[] inner = str.split(":");
                         if (str.contains(":") && (inner.length == 1)) {
 //                                String[] inner = str.split(":");
 //                                if (inner.length >= 2) {
-//                                    System.out.println("Key-" + str.substring(0, str.indexOf(":")));
-//                                    System.out.println("Value-" + str.substring(str.indexOf(":") + 1, str.length()));
+//                                    System.out.println("**Key**\t" + str.substring(0, str.indexOf(":")));
+//                                    System.out.println("**Value**\t" + str.substring(str.indexOf(":") + 1, str.length()));
 //                                } else if (inner.length == 1) {
-                            System.out.println("Key-" + str.trim());
-                            System.out.print("Value-");
+                            System.out.println("**Key**\t" + str.trim());
+                            System.out.println("**Value**\t");
 //                                }
                         } else {
                             System.out.println(str.trim());
@@ -392,11 +392,11 @@ public class PrintKeyValue {
                 } else if (str.contains(":")) {
                     String[] inner = str.split(":");
                     if (inner.length >= 2) {
-                        System.out.println("Key-" + str.substring(0, str.indexOf(":")));
-                        System.out.println("Value-" + str.substring(str.indexOf(":") + 1, str.length()));
+                        System.out.println("**Key**\t" + str.substring(0, str.indexOf(":")));
+                        System.out.println("**Value**\t" + str.substring(str.indexOf(":") + 1, str.length()));
                     } else if (inner.length == 1) {
-                        System.out.println("Key-" + str.trim());
-                        System.out.print("Value-");
+                        System.out.println("**Key**\t" + str.trim());
+                        System.out.println("**Value**\t");
                     }
                 } else {
                     System.out.println(str.trim());
