@@ -11,9 +11,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.PatternSyntaxException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
+import static pdf.PrintKeyValue.merge;
 
 /**
  *
@@ -22,6 +27,11 @@ import org.apache.pdfbox.util.PDFTextStripper;
 public class testPB {
     
     public static void main(String[] args) {
+        String g = "• Primary:<> Rate of change in the right distal carotid artery intima media thickness (CIMT)<> • Secondary:<> Changes in calcium in the coronary arteries (CAC) and abdominal aorta<> • Safety:<> 1. Deaths.<> (Continued) 2. Cardiovascular events.<> 3. Cerebrovascular events.<> 4. Arterial revascularisation procedures.<> 5. Cancers.<> 6. Ocurrence of white blood cell (WBC) count below the laboratory normal limit<> (4000 cell/μL).";
+        HashMap<String, String> KeyV = new HashMap<String, String>();
+        fillValues(g, KeyV);
+        
+/* // all code         
         String x = "(years) \n hi hekk \n hosls";
 //        if ((!x.substring(0, 1).toUpperCase().matches(x.substring(0, 1)))) {
 //            System.out.println(" " + x);
@@ -44,15 +54,7 @@ public class testPB {
             for(String pqr : tokens)
                 System.out.println(pqr.trim());
         }
-        
-        /*
-        Elegibility: 5309.
-         Randomised: 506 (254 vitamins versus 252 placebo).
-         • Age (years)
-         Overall: 61.4
-         B-vitamins group: 61.7 (±10.1).
-         Placebo group: 61.1 (± 9.6).#$# • Sex (men):#$# Overall: 61%#$# B-vitamins group: 61%.#$# Placebo group: 61%.#$# • Inclusion criteria:#$# 1. Men and postmenopausal women 40 years old#$# 2. Fasting tHcy 8.5 mol/L#$# 3. No clinical signs/symptoms of cardiovascular disease (CVD).#$# • Exclusion criteria:#$# 1. Fasting triglycerides > 5.64 mmol/L (500 mg/dL).#$# 2. Diabetes mellitus or fasting serum glucose > 6.99 mmol/L (126 mg/dL).#$# 3. Systolic blood pressure ≥ 160 mm Hg and/or diastolic blood pressure ≥ 100 mm#$# Hg.#$# 4. Untreated thyroid disease.#$# 5. Creatinine clearance < 70 mL/min.#$# 6. Life-threatening illness with prognosis 5 years.#$# 7. Five alcoholic drinks daily.#$#
-        */
+
         for(String g :testC){
             System.out.println("\n\n ==== \n\n");
             String[] tokens = g.split("<>");
@@ -116,6 +118,8 @@ public class testPB {
         }
         
         
+      
+*/        
         
         
         
@@ -151,6 +155,129 @@ public class testPB {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+    }
+    
+    
+    public static void fillValues(String g, Map<String, String> KeyV) {
+
+        List<String> all = new ArrayList<String>();
+        //merge
+        String ptr = g;
+        g = merge(ptr);
+
+        //prints
+//        for(String g: testC){
+//            System.out.println("\n\n ==== \n\n");
+//            String[] tokens = g.split("<>");
+//            for(String pqr : tokens)
+//                System.out.println(pqr.trim());
+//        }
+        String[] tokens = g.split("<>");
+        boolean bigDot = false;
+        for (int i = 0; i < tokens.length; i++) {
+            String str = tokens[i];
+            if (str.contains("•")) {
+                bigDot = true;
+            }
+            if (!str.matches("//s*")) {
+                if (bigDot) {
+                    if (str.contains("•")) {
+                        str = str.replaceAll("•", "");
+                        if (str.contains(":")) {
+                            String[] inner = str.split(":");
+                            if (inner.length >= 2) {
+                                all.add("#Key");
+                                all.add(str.substring(0, str.indexOf(":")));
+                                all.add("#Value");
+                                all.add(str.substring(str.indexOf(":") + 1, str.length()));
+                            } else if (inner.length == 1) {
+                                all.add("#Key");
+                                all.add(str.trim());
+                                all.add("#Value");
+                            }
+                        } else {
+                            all.add("#Key");
+                            all.add(str.trim());
+                            all.add("#Value");
+                        }
+                    } else {
+                        String[] inner = str.split(":");
+                        if (str.contains(":") && (inner.length == 1)) {
+//                                String[] inner = str.split(":");
+//                                if (inner.length >= 2) {
+//                                    System.out.println("Key-" + str.substring(0, str.indexOf(":")));
+//                                    System.out.println("Value-" + str.substring(str.indexOf(":") + 1, str.length()));
+//                                } else if (inner.length == 1) {
+                            all.add("#Key");
+                            all.add(str.trim());
+                            all.add("#Value");
+//                                }
+                        } else {
+                            all.add(str.trim());
+                        }
+                    }
+
+                } else if (str.contains(":")) {
+                    String[] inner = str.split(":");
+                    if (inner.length >= 2) {
+                        all.add("#Key");
+                        all.add(str.substring(0, str.indexOf(":")));
+                        all.add("#Value");
+                        all.add(str.substring(str.indexOf(":") + 1, str.length()));
+                    } else if (inner.length == 1) {
+                        all.add("#Key");
+                        all.add(str.trim());
+                        all.add("#Value");
+                    }
+                } else {
+                    all.add(str.trim());
+                }
+            }
+
+        }
+        for (String str : all) {
+            System.out.println(str);
+        }
+        int i = 0;
+        while (i < all.size()) {
+            String str = all.get(i);
+            if (str.contains("#Key")) {
+                StringBuilder Kb = new StringBuilder();
+                StringBuilder Vb = new StringBuilder();
+                i++;
+                if (i < all.size()) {
+                    str = all.get(i);
+                }
+                if (!str.contains("#Value")) {
+                    Kb.append(str);
+                    i++;
+                }
+                if (i < all.size()) {
+                    str = all.get(i);
+                }
+                if (str.contains("#Value")) {
+                    i++;
+                    if (i < all.size()) {
+                        str = all.get(i);
+                    }
+                    while ((!str.contains("#Key")) && (i < all.size())) {
+                        Vb.append(str);
+                        i++;
+                        if (i < all.size()) {
+                            str = all.get(i);
+                        }
+                    }
+                    i--;
+                }
+                KeyV.put(Kb.toString(), Vb.toString());
+            }
+            i++;
+        }
+        System.out.println("==== Map Print ====");
+        for (Map.Entry entry : KeyV.entrySet()) {
+            System.out.println(entry.getKey() + "\t" + entry.getValue());
+        }
+        System.out.println("==== END ====");
     }
     
     public static String merge(String g){

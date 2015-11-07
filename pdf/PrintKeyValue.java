@@ -284,8 +284,8 @@ public class PrintKeyValue {
             //tempFN.printFName();
         }
         
-        // Printing DS
-        
+        // Printing in console
+        /*
         for (fName tempFN : fnL) {
             //tempFN.printFName();
             System.out.println("\n=====\n");
@@ -311,6 +311,19 @@ public class PrintKeyValue {
 //            System.out.println("+++");
             //fillValues(tempFN.stuL.get(0).participants,tempFN.stuL.get(0).pKeyV);
         }
+        
+        */
+        //Printing in DS
+        for (fName tempFN : fnL) {
+            //tempFN.printFName();
+            for (int i = 0; i < tempFN.stuL.size(); i++) {
+                fillValues(tempFN.stuL.get(i).participants, tempFN.stuL.get(i).pKeyV,"Participants");
+                fillValues(tempFN.stuL.get(i).outcomes, tempFN.stuL.get(i).oKeyV,"Outcomes");
+                fillValues(tempFN.stuL.get(i).method, tempFN.stuL.get(i).mKeyV,"Methods");
+                fillValues(tempFN.stuL.get(i).interventions, tempFN.stuL.get(i).iKeyV,"Intervention");
+            }
+        }
+        
         
         // Just method to check if everything is parsed
         if((MethodsL.size() + InterventionsL.size() + OutcomesL.size() + ParticipantsL.size() + FilenameL.size()) != 0)
@@ -407,21 +420,13 @@ public class PrintKeyValue {
 
     }
     
-    public static void fillValues(String g,Map<String,String> KeyV) {
+    public static void fillValues(String g,Map<String,String> KeyV, String cat) {
         
         List<String> all = new ArrayList<String>();
         //merge
         String ptr = g;
         g = merge(ptr);
         
-        //prints
-        
-//        for(String g: testC){
-//            System.out.println("\n\n ==== \n\n");
-//            String[] tokens = g.split("<>");
-//            for(String pqr : tokens)
-//                System.out.println(pqr.trim());
-//        }
         
         String[] tokens = g.split("<>");
         boolean bigDot = false;
@@ -486,9 +491,6 @@ public class PrintKeyValue {
             }
 
         }
-        for(String str : all){
-            System.out.println(str);
-        }
         int i =0;
         while(i < all.size()){
             String str = all.get(i);
@@ -523,11 +525,17 @@ public class PrintKeyValue {
             }
             i++;
         }
-        System.out.println("==== Map Print ====");
+//        System.out.println("==== Map Print ====");
         for (Map.Entry entry : KeyV.entrySet()) {
-            System.out.println(entry.getKey() + "\t" + entry.getValue());
+            if(entry.getKey().toString().trim().endsWith(":")){
+                System.out.println(entry.getKey().toString().trim().replaceFirst(":", "") + "\t" + entry.getValue()+"\t"+cat);
+            }
+            else{
+                System.out.println(entry.getKey().toString().trim() + "\t" + entry.getValue()+"\t"+cat);
+            }
+            
         }
-        System.out.println("==== END ====");
+//        System.out.println("==== END ====");
     }
     
     public static String merge(String g){
