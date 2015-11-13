@@ -27,9 +27,19 @@ import java.util.regex.Pattern;
  *
  * @author Abhishek
  */
-public class test {
+public class printInclExcl {
     
     public static void main(String argsv[]) throws FileNotFoundException, IOException{
+        String ip = "fdvb";
+        if(!ip.matches("\\s*"))
+            System.out.println("metches");
+//        Matcher matcher1;
+//        matcher1 = Pattern.compile("\\d\\.\\s+").matcher(ip);
+//        if (matcher1.find()) {
+//            ip = ip.substring(3, ip.length());
+//            System.out.println(ip);
+//        }
+        
         String x = "Intention-to-treat: yes. (An intention-to-treat analysis was performed for all participants who had carotid ultrasonography at baseline and at least one follow-up visit, p.731)";
         
         System.out.println(x.substring(0, x.indexOf(":")));

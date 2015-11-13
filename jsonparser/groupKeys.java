@@ -18,16 +18,16 @@ import java.util.List;
  * @author Abhishek
  */
 public class groupKeys {
-    public static void main(String[] argsv) throws FileNotFoundException, IOException{
-        List<Key> temp = new ArrayList<Key>();
+    public void gKeys(List<Key> temp) throws FileNotFoundException, IOException{
         
-        BufferedReader br = new BufferedReader(new FileReader(new File("topFreqKeys")));
-        String line = "";
-        while ((line = br.readLine()) != null){
-            String[] token = line.split("\t");
-            Key k = new Key(token[0],Integer.parseInt(token[1]),token[2],countWords(token[0]));
-            temp.add(k);
-        }
+        
+//        BufferedReader br = new BufferedReader(new FileReader(new File("topFreqKeys")));
+//        String line = "";
+//        while ((line = br.readLine()) != null){
+//            String[] token = line.split("\t");
+//            Key k = new Key(token[0],Integer.parseInt(token[1]),token[2],countWords(token[0]));
+//            temp.add(k);
+//        }
         List<Key> removeList = new ArrayList<Key>();
         for(Key k : temp){
             if(k.name.startsWith(" ")){
@@ -60,8 +60,8 @@ public class groupKeys {
         CosineSimilarity cs = new CosineSimilarity();
         for(int i = 0; i < temp.size();i++){
             for(int j = i+1; j < temp.size();j++){
-                double sim = cs.CosineSimilarity_Score(temp.get(i).name,temp.get(j).name);
-                int ed = minDistance(temp.get(i).name,temp.get(j).name);
+                double sim = cs.CosineSimilarity_Score(temp.get(i).name.toLowerCase(),temp.get(j).name.toLowerCase());
+                int ed = minDistance(temp.get(i).name.toLowerCase(),temp.get(j).name.toLowerCase());
                 if(ed == 1){
                     if ((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))) {
                         temp.get(i).gKey.add(temp.get(j));
@@ -87,16 +87,17 @@ public class groupKeys {
         
         for(Key k : temp){
             if(!k.gKey.isEmpty()){
+                System.out.print(k.category + " # ");
                 System.out.print(k.name + " <- ");
                 for(Key p : k.gKey)
-                    System.out.print( p.name +", ");
+                    System.out.print( p.name +" | ");
                 System.out.println("");
             }
             
         }
     }
     
-    public static int countWords(String s) {
+    public int countWords(String s) {
 
         int wordCount = 0;
 
@@ -122,7 +123,7 @@ public class groupKeys {
     }
 
 
-    public static int minDistance(String word1, String word2) {
+    public int minDistance(String word1, String word2) {
         int len1 = word1.length();
         int len2 = word2.length();
 

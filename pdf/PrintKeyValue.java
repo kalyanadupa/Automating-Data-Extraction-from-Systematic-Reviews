@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
@@ -33,9 +35,14 @@ import org.json.simple.parser.ParseException;
 public class PrintKeyValue {
     
     public static void main(String argsv[]) throws FileNotFoundException, IOException, ParseException{
+        HashMap<String, Integer> pKey = new HashMap<String, Integer>();
+        HashMap<String, Integer> mKey = new HashMap<String, Integer>();
+        HashMap<String, Integer> oKey = new HashMap<String, Integer>();
+        HashMap<String, Integer> iKey = new HashMap<String, Integer>();
         //results_cochrane_HF.json
         System.out.println("reading");
-        String fileName = "results_cochrane_HF.json";
+        String fileName = "firstFile.json";
+//        String fileName = "results_cochrane_HF.json";
         FileReader fileReader = new FileReader(fileName);
         List<String> orderL = new ArrayList<String>();
         // Always wrap FileReader in BufferedReader.
@@ -313,21 +320,72 @@ public class PrintKeyValue {
         }
         
         */
+
         //Printing in DS
         for (fName tempFN : fnL) {
             //tempFN.printFName();
             for (int i = 0; i < tempFN.stuL.size(); i++) {
-                fillValues(tempFN.stuL.get(i).participants, tempFN.stuL.get(i).pKeyV,"Participants");
-                fillValues(tempFN.stuL.get(i).outcomes, tempFN.stuL.get(i).oKeyV,"Outcomes");
-                fillValues(tempFN.stuL.get(i).method, tempFN.stuL.get(i).mKeyV,"Methods");
-                fillValues(tempFN.stuL.get(i).interventions, tempFN.stuL.get(i).iKeyV,"Intervention");
+                fillValues(tempFN.stuL.get(i).participants, tempFN.stuL.get(i).pKeyV,"Participants",pKey);
+                fillValues(tempFN.stuL.get(i).outcomes, tempFN.stuL.get(i).oKeyV,"Outcomes",oKey);
+                fillValues(tempFN.stuL.get(i).method, tempFN.stuL.get(i).mKeyV,"Methods",mKey);
+                fillValues(tempFN.stuL.get(i).interventions, tempFN.stuL.get(i).iKeyV,"Intervention",iKey);
             }
         }
+
+        //Calculating keys and printing frequency
+        List<Key> temp = new ArrayList<Key>();
+        printFreqMap("Participants",pKey,temp);
+        printFreqMap("Outcomes",oKey,temp);
+        printFreqMap("Methods",mKey,temp);
+        printFreqMap("Intervention",iKey,temp);
         
+        
+        //Grouping Keys
+        System.out.println("\n*** Grouping ***\n");
+        groupKeys gk = new groupKeys();
+        gk.gKeys(temp);
         
         // Just method to check if everything is parsed
         if((MethodsL.size() + InterventionsL.size() + OutcomesL.size() + ParticipantsL.size() + FilenameL.size()) != 0)
             System.out.println("ERROR : Something not parsed");        
+    }
+    //Print Keys and also adds them to list
+    public static void printFreqMap(String cat, Map<String,Integer> keyF,List<Key> temp){
+        System.out.println("Key\tFrequency\tCategory");
+        for (Map.Entry entry : keyF.entrySet()) {
+            String k = entry.getKey().toString();
+            Integer fq = Integer.parseInt(entry.getValue().toString());
+            System.out.println(k + "\t" + fq+"\t"+cat);
+            if(fq > 2){
+                Key kx = new Key(k, Integer.parseInt(entry.getValue().toString()), cat, countWords(k));
+                temp.add(kx);
+            }
+        }
+    }
+    
+    public static int countWords(String s) {
+
+        int wordCount = 0;
+
+        boolean word = false;
+        int endOfLine = s.length() - 1;
+
+        for (int i = 0; i < s.length(); i++) {
+            // if the char is a letter, word = true.
+            if (Character.isLetter(s.charAt(i)) && i != endOfLine) {
+                word = true;
+            // if char isn't a letter and there have been letters before,
+                // counter goes up.
+            } else if (!Character.isLetter(s.charAt(i)) && word) {
+                wordCount++;
+                word = false;
+            // last word of String; if it doesn't end with a non letter, it
+                // wouldn't count without this.
+            } else if (Character.isLetter(s.charAt(i)) && i == endOfLine) {
+                wordCount++;
+            }
+        }
+        return wordCount;
     }
     
     public static List<String> getValues(String lookFor,String jsonText) throws ParseException{
@@ -420,7 +478,7 @@ public class PrintKeyValue {
 
     }
     
-    public static void fillValues(String g,Map<String,String> KeyV, String cat) {
+    public static void fillValues(String g,Map<String,String> KeyV, String cat,Map<String,Integer> keyFreq) {
         
         List<String> all = new ArrayList<String>();
         //merge
@@ -527,15 +585,29 @@ public class PrintKeyValue {
         }
 //        System.out.println("==== Map Print ====");
         for (Map.Entry entry : KeyV.entrySet()) {
-            if(entry.getKey().toString().trim().endsWith(":")){
-                System.out.println(entry.getKey().toString().trim().replaceFirst(":", "") + "\t" + entry.getValue()+"\t"+cat);
-            }
-            else{
-                System.out.println(entry.getKey().toString().trim() + "\t" + entry.getValue()+"\t"+cat);
-            }
+            String k = entry.getKey().toString();
+            k = cleanKey(k);
             
+            if(!k.matches("\\s*")){
+                if (!entry.getValue().toString().matches("\\s*")) {
+                    System.out.println(k + "\t" + entry.getValue() + "\t" + cat);
+                    keyFreq = addKey(keyFreq, k);
+                }
+            }
+                
         }
 //        System.out.println("==== END ====");
+    }
+    
+    public static Map<String,Integer> addKey(Map<String,Integer>  keyFreq,String x){
+        Integer f = keyFreq.get(x);
+        if(f == null){
+            keyFreq.put(x, 1);
+        }
+        else{
+            keyFreq.put(x, f+1);
+        }
+        return keyFreq;
     }
     
     public static String merge(String g){
@@ -563,6 +635,22 @@ public class PrintKeyValue {
         }
         return sb.toString();
         
+    }
+    
+    public static String cleanKey(String ip){
+        if(ip.trim().endsWith(":")){
+            ip = ip.replaceFirst(":", "");
+        }
+        if(ip.contains(";")){
+            ip.replaceAll(";", " ");
+        }
+        Matcher matcher;
+        matcher = Pattern.compile("\\d\\.\\s+").matcher(ip);
+        if (matcher.find()) {
+            ip = ip.substring(3, ip.length());
+        }
+        ip = ip.trim();
+        return ip;
     }
     
 }
