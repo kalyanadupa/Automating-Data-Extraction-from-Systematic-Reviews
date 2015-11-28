@@ -27,6 +27,9 @@ import static pdf.PrintKeyValue.merge;
 public class testPB {
     
     public static void main(String[] args) {
+
+        
+        
         String g = "• Primary:<> Rate of change in the right distal carotid artery intima media thickness (CIMT)<> • Secondary:<> Changes in calcium in the coronary arteries (CAC) and abdominal aorta<> • Safety:<> 1. Deaths.<> (Continued) 2. Cardiovascular events.<> 3. Cerebrovascular events.<> 4. Arterial revascularisation procedures.<> 5. Cancers.<> 6. Ocurrence of white blood cell (WBC) count below the laboratory normal limit<> (4000 cell/μL).";
         HashMap<String, String> KeyV = new HashMap<String, String>();
         fillValues(g, KeyV);

@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import pdf.KeyPair;
 
 /**
  *
@@ -19,16 +20,9 @@ import java.util.List;
  */
 public class groupKeys {
     public void gKeys(List<Key> temp) throws FileNotFoundException, IOException{
-        
-        
-//        BufferedReader br = new BufferedReader(new FileReader(new File("topFreqKeys")));
-//        String line = "";
-//        while ((line = br.readLine()) != null){
-//            String[] token = line.split("\t");
-//            Key k = new Key(token[0],Integer.parseInt(token[1]),token[2],countWords(token[0]));
-//            temp.add(k);
-//        }
+
         List<Key> removeList = new ArrayList<Key>();
+        List<KeyPair> kgp = new ArrayList<KeyPair>();
         for(Key k : temp){
             if(k.name.startsWith(" ")){
                 k.name = k.name.trim();
@@ -38,12 +32,14 @@ public class groupKeys {
                             k.gKey.add(p);
                             k.freq = k.freq +p.freq;
                             removeList.add(p);
+                            kgp.add(new KeyPair(k,p));
                             System.out.println("Grouped " + k.name +"("+k.freq+")" +" <- " + p.name+"("+p.freq+")");
                         }
                         if(k.freq < p.freq){
                             p.gKey.add(k);
                             p.freq = k.freq +p.freq;
                             removeList.add(k);
+                            kgp.add(new KeyPair(k,p));
                             System.out.println("Grouped " + p.name+"("+p.freq+")" +" <- " + k.name+"("+k.freq+")");
                         }   
                     }
@@ -60,8 +56,10 @@ public class groupKeys {
         CosineSimilarity cs = new CosineSimilarity();
         for(int i = 0; i < temp.size();i++){
             for(int j = i+1; j < temp.size();j++){
-                double sim = cs.CosineSimilarity_Score(temp.get(i).name.toLowerCase(),temp.get(j).name.toLowerCase());
-                int ed = minDistance(temp.get(i).name.toLowerCase(),temp.get(j).name.toLowerCase());
+                String x1 = temp.get(i).name.toLowerCase().replaceAll("-", " ");
+                String x2 = temp.get(j).name.toLowerCase().replaceAll("-", " ");
+                double sim = cs.CosineSimilarity_Score(x1,x2);
+                int ed = minDistance(x1,x2);
                 if(ed == 1){
                     if ((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))) {
                         temp.get(i).gKey.add(temp.get(j));

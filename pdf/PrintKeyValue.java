@@ -41,7 +41,7 @@ public class PrintKeyValue {
         HashMap<String, Integer> iKey = new HashMap<String, Integer>();
         //results_cochrane_HF.json
         System.out.println("reading");
-        String fileName = "firstFile.json";
+        String fileName = "results_cochrane_HF.json";
 //        String fileName = "results_cochrane_HF.json";
         FileReader fileReader = new FileReader(fileName);
         List<String> orderL = new ArrayList<String>();
@@ -128,8 +128,7 @@ public class PrintKeyValue {
                 currFN = new fName();
             }
         }
-        
-        int op = 0,ip = 0;
+
         
         for(fName tempFN : fnL){
             //tempFN.printFName();
@@ -342,6 +341,9 @@ public class PrintKeyValue {
         
         //Grouping Keys
         System.out.println("\n*** Grouping ***\n");
+        for(Key kp : temp)
+            System.out.println(kp.name);
+                
         groupKeys gk = new groupKeys();
         gk.gKeys(temp);
         

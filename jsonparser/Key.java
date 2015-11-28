@@ -13,10 +13,10 @@ import java.util.List;
  * @author Abhishek
  */
 public class Key {
-    String name;
-    int freq;
-    String category;
-    int words;
+    public String name;
+    public int freq;
+    public String category;
+    public int words;
     public List<Key> gKey;
     String groupedKeys;
     
