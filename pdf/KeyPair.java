@@ -12,8 +12,8 @@ import jsonparser.Key;
  * @author Abhishek
  */
 public class KeyPair {
-    Key k1;
-    Key k2;
+    public Key k1;
+    public Key k2;
     
     public KeyPair(Key k11, Key k22){
         this.k1 = k11;

@@ -19,7 +19,7 @@ import pdf.KeyPair;
  * @author Abhishek
  */
 public class groupKeys {
-    public void gKeys(List<Key> temp) throws FileNotFoundException, IOException{
+    public List<Key> gKeys(List<Key> temp) throws FileNotFoundException, IOException{
 
         List<Key> removeList = new ArrayList<Key>();
         List<KeyPair> kgp = new ArrayList<KeyPair>();
@@ -29,16 +29,12 @@ public class groupKeys {
                 for(Key p : temp){
                     if(k.name.equalsIgnoreCase(p.name) && k.category.contains(p.category) && (k.freq != p.freq)){
                         if(k.freq > p.freq){
-                            k.gKey.add(p);
                             k.freq = k.freq +p.freq;
-                            removeList.add(p);
                             kgp.add(new KeyPair(k,p));
                             System.out.println("Grouped " + k.name +"("+k.freq+")" +" <- " + p.name+"("+p.freq+")");
                         }
                         if(k.freq < p.freq){
-                            p.gKey.add(k);
                             p.freq = k.freq +p.freq;
-                            removeList.add(k);
                             kgp.add(new KeyPair(k,p));
                             System.out.println("Grouped " + p.name+"("+p.freq+")" +" <- " + k.name+"("+k.freq+")");
                         }   
@@ -46,12 +42,7 @@ public class groupKeys {
                 }
             }
         }
-        for(Key x : removeList){
-            if(x.gKey.isEmpty())
-                temp.remove(x);
-            else
-                System.out.println("Error"+x.name);
-        }
+
         
         CosineSimilarity cs = new CosineSimilarity();
         for(int i = 0; i < temp.size();i++){
@@ -62,38 +53,84 @@ public class groupKeys {
                 int ed = minDistance(x1,x2);
                 if(ed == 1){
                     if ((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))) {
-                        temp.get(i).gKey.add(temp.get(j));
+                        kgp.add(new KeyPair(temp.get(i),temp.get(j)));
                         System.out.println("Grouped " + temp.get(i).name+"("+temp.get(i).freq+")" +" <- " + temp.get(j).name+"("+temp.get(j).freq+")");
                     } else if ((temp.get(i).freq < temp.get(j).freq) && (temp.get(j).category.contains(temp.get(i).category))) {
-                        temp.get(j).gKey.add(temp.get(i));
+                        kgp.add(new KeyPair(temp.get(i),temp.get(j)));
                         System.out.println("Grouped " + temp.get(j).name+"("+temp.get(j).freq+")" +" <- " + temp.get(i).name+"("+temp.get(i).freq+")");
                     }
                 }
                 else if(sim > 0.7){
                     if((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))){
-                        temp.get(i).gKey.add(temp.get(j));
+                        kgp.add(new KeyPair(temp.get(i),temp.get(j)));
                         System.out.println("Grouped " + temp.get(i).name+"("+temp.get(i).freq+")" +" <- " + temp.get(j).name+"("+temp.get(j).freq+")");
                     } 
                     else if((temp.get(i).freq < temp.get(j).freq) && (temp.get(j).category.contains(temp.get(i).category))){
-                        temp.get(j).gKey.add(temp.get(i));
+                        kgp.add(new KeyPair(temp.get(i),temp.get(j)));
                         System.out.println("Grouped " + temp.get(j).name+"("+temp.get(j).freq+")" +" <- " + temp.get(i).name+"("+temp.get(i).freq+")");
                     }
                 }
-                
             }
         }
         
-        for(Key k : temp){
-            if(!k.gKey.isEmpty()){
-                System.out.print(k.category + " # ");
-                System.out.print(k.name + " <- ");
-                for(Key p : k.gKey)
-                    System.out.print( p.name +" | ");
-                System.out.println("");
+
+        while(kgp.size() != 0){
+            KeyPair kp = kgp.get(0);
+            kgp.remove(0);
+            List<Key> grp = new ArrayList<Key>();
+            List<KeyPair> rmkp = new ArrayList<KeyPair>();
+            grp.add(kp.k1);
+            grp.add(kp.k2);
+            int old = 0;
+            while((grp.size() - old) != 0){
+                old = grp.size();
+                for(KeyPair kpr : kgp){
+                    Key xk = find(grp,kpr);
+                    if(xk != null){
+                        if(!grp.contains(xk))
+                            grp.add(xk);
+                        rmkp.add(kpr);
+                    }
+                }
             }
-            
+            for(KeyPair rm : rmkp){
+                kgp.remove(rm);
+            }
+            int highFreq = 0;
+            int index =0 ;
+            Key high = null;
+            for(Key nk : grp){
+                if(nk.freq >= highFreq)
+                    high = nk;
+            }
+            index = temp.indexOf(high);
+//            System.out.println("Index obtained "+ high.name);
+            for(Key nk : grp){
+                if(!nk.equals(high)){
+                    temp.get(index).gKey.add(nk);
+                    temp.remove(nk);
+//                    System.out.println("Adding "+nk.name +" to "+ high.name );
+                }
+                System.out.print(nk.name+"("+nk.freq+")\t" );
+            }
+            System.out.println("");    
         }
+        
+        return temp;
     }
+    
+    
+    
+    public Key find(List<Key> grp, KeyPair kp){
+        for(Key kx : grp){
+            if(kp.k1.equals(kx))
+                return kp.k2;
+            else if(kp.k2.equals(kx))
+                return kp.k1;
+        }
+        return null;
+    }
+    
     
     public int countWords(String s) {
 

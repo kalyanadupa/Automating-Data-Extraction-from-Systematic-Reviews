@@ -341,23 +341,37 @@ public class PrintKeyValue {
         
         //Grouping Keys
         System.out.println("\n*** Grouping ***\n");
-        for(Key kp : temp)
-            System.out.println(kp.name);
+
                 
         groupKeys gk = new groupKeys();
-        gk.gKeys(temp);
+        temp = gk.gKeys(temp);
         
+        System.out.println("\n\n*&^ Printing &$*\n\n");
+        System.out.println("Key\tFrequency\tCategory");
+        for(Key kk : temp){
+            StringBuilder sb = new StringBuilder(kk.name+"\t"+kk.freq+"\t"+kk.category+"\t");
+            
+            if(!kk.gKey.isEmpty()){
+                for(Key kx : kk.gKey)
+                    sb.append(kx.name+" ,");
+                sb.deleteCharAt(sb.length()-1);
+//                System.out.println(sb.toString());
+            }
+        }
         // Just method to check if everything is parsed
         if((MethodsL.size() + InterventionsL.size() + OutcomesL.size() + ParticipantsL.size() + FilenameL.size()) != 0)
             System.out.println("ERROR : Something not parsed");        
     }
+    
+    
+    
     //Print Keys and also adds them to list
     public static void printFreqMap(String cat, Map<String,Integer> keyF,List<Key> temp){
         System.out.println("Key\tFrequency\tCategory");
         for (Map.Entry entry : keyF.entrySet()) {
             String k = entry.getKey().toString();
             Integer fq = Integer.parseInt(entry.getValue().toString());
-            System.out.println(k + "\t" + fq+"\t"+cat);
+//            System.out.println(k + "\t" + fq+"\t"+cat);
             if(fq > 2){
                 Key kx = new Key(k, Integer.parseInt(entry.getValue().toString()), cat, countWords(k));
                 temp.add(kx);
