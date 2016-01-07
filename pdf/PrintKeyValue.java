@@ -291,7 +291,7 @@ public class PrintKeyValue {
         }
         
         // Printing in console
-        /*
+        
         for (fName tempFN : fnL) {
             //tempFN.printFName();
             System.out.println("\n=====\n");
@@ -318,7 +318,7 @@ public class PrintKeyValue {
             //fillValues(tempFN.stuL.get(0).participants,tempFN.stuL.get(0).pKeyV);
         }
         
-        */
+        
 
         //Printing in DS
         for (fName tempFN : fnL) {
@@ -349,13 +349,15 @@ public class PrintKeyValue {
         System.out.println("\n\n*&^ Printing &$*\n\n");
         System.out.println("Key\tFrequency\tCategory");
         for(Key kk : temp){
-            StringBuilder sb = new StringBuilder(kk.name+"\t"+kk.freq+"\t"+kk.category+"\t");
-            
+            StringBuilder sb = new StringBuilder(kk.name+"\t"+kk.freq+"\t"+kk.category+"\t");            
             if(!kk.gKey.isEmpty()){
                 for(Key kx : kk.gKey)
                     sb.append(kx.name+" ,");
                 sb.deleteCharAt(sb.length()-1);
-//                System.out.println(sb.toString());
+                System.out.println(sb.toString());
+            }
+            else{
+                System.out.println(sb.toString());
             }
         }
         // Just method to check if everything is parsed
@@ -420,7 +422,7 @@ public class PrintKeyValue {
         return tempL;
     }
     
-    public static void printKeyValues(String g,Map<String,String> KeyV) {
+    public static void printKeyValues(String g,Map<String,String> KeyV)  {
 
 
         //merge

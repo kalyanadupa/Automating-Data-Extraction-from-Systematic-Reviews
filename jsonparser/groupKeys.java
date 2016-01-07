@@ -31,12 +31,12 @@ public class groupKeys {
                         if(k.freq > p.freq){
                             k.freq = k.freq +p.freq;
                             kgp.add(new KeyPair(k,p));
-                            System.out.println("Grouped " + k.name +"("+k.freq+")" +" <- " + p.name+"("+p.freq+")");
+//                            System.out.println("Grouped " + k.name +"("+k.freq+")" +" <- " + p.name+"("+p.freq+")");
                         }
                         if(k.freq < p.freq){
                             p.freq = k.freq +p.freq;
                             kgp.add(new KeyPair(k,p));
-                            System.out.println("Grouped " + p.name+"("+p.freq+")" +" <- " + k.name+"("+k.freq+")");
+//                            System.out.println("Grouped " + p.name+"("+p.freq+")" +" <- " + k.name+"("+k.freq+")");
                         }   
                     }
                 }
@@ -54,20 +54,20 @@ public class groupKeys {
                 if(ed == 1){
                     if ((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))) {
                         kgp.add(new KeyPair(temp.get(i),temp.get(j)));
-                        System.out.println("Grouped " + temp.get(i).name+"("+temp.get(i).freq+")" +" <- " + temp.get(j).name+"("+temp.get(j).freq+")");
+//                        System.out.println("Grouped " + temp.get(i).name+"("+temp.get(i).freq+")" +" <- " + temp.get(j).name+"("+temp.get(j).freq+")");
                     } else if ((temp.get(i).freq < temp.get(j).freq) && (temp.get(j).category.contains(temp.get(i).category))) {
                         kgp.add(new KeyPair(temp.get(i),temp.get(j)));
-                        System.out.println("Grouped " + temp.get(j).name+"("+temp.get(j).freq+")" +" <- " + temp.get(i).name+"("+temp.get(i).freq+")");
+//                        System.out.println("Grouped " + temp.get(j).name+"("+temp.get(j).freq+")" +" <- " + temp.get(i).name+"("+temp.get(i).freq+")");
                     }
                 }
                 else if(sim > 0.7){
                     if((temp.get(i).freq > temp.get(j).freq) && (temp.get(i).category.contains(temp.get(j).category))){
                         kgp.add(new KeyPair(temp.get(i),temp.get(j)));
-                        System.out.println("Grouped " + temp.get(i).name+"("+temp.get(i).freq+")" +" <- " + temp.get(j).name+"("+temp.get(j).freq+")");
+//                        System.out.println("Grouped " + temp.get(i).name+"("+temp.get(i).freq+")" +" <- " + temp.get(j).name+"("+temp.get(j).freq+")");
                     } 
                     else if((temp.get(i).freq < temp.get(j).freq) && (temp.get(j).category.contains(temp.get(i).category))){
                         kgp.add(new KeyPair(temp.get(i),temp.get(j)));
-                        System.out.println("Grouped " + temp.get(j).name+"("+temp.get(j).freq+")" +" <- " + temp.get(i).name+"("+temp.get(i).freq+")");
+//                        System.out.println("Grouped " + temp.get(j).name+"("+temp.get(j).freq+")" +" <- " + temp.get(i).name+"("+temp.get(i).freq+")");
                     }
                 }
             }
@@ -100,18 +100,18 @@ public class groupKeys {
             int index =0 ;
             Key high = null;
             for(Key nk : grp){
-                if(nk.freq >= highFreq)
+                if(nk.freq >= highFreq){
                     high = nk;
+                    highFreq = nk.freq;
+                }
             }
             index = temp.indexOf(high);
-//            System.out.println("Index obtained "+ high.name);
             for(Key nk : grp){
                 if(!nk.equals(high)){
-                    temp.get(index).gKey.add(nk);
+                    temp.get(temp.indexOf(high)).gKey.add(nk);
                     temp.remove(nk);
-//                    System.out.println("Adding "+nk.name +" to "+ high.name );
                 }
-                System.out.print(nk.name+"("+nk.freq+")\t" );
+//              System.out.print(nk.name+"("+nk.freq+")\t" );
             }
             System.out.println("");    
         }
@@ -197,4 +197,8 @@ public class groupKeys {
 
         return dp[len1][len2];
     }
+    
+//    public boolean checkKey(String name,int f, List<Key> fi){
+//        
+//    }
 }
