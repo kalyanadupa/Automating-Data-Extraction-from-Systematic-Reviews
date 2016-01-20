@@ -33,7 +33,7 @@ import org.json.simple.parser.ParseException;
  * @author aka324
  */
 public class PrintKeyValue {
-    
+    static List<String> set= new ArrayList<String>();
     public static void main(String argsv[]) throws FileNotFoundException, IOException, ParseException{
         HashMap<String, Integer> pKey = new HashMap<String, Integer>();
         HashMap<String, Integer> mKey = new HashMap<String, Integer>();
@@ -189,9 +189,9 @@ public class PrintKeyValue {
 //                                System.out.println("newL "+ tempFN.stuL.get(i).method);
                             }
                             catch(Exception ex){
-//                                System.out.println("** Error **");
-//                                System.out.println("Find - " + find);
-//                                System.out.println("nL - " + nL);
+                                System.out.println("** Error **");
+                                System.out.println("Find - " + find);
+                                System.out.println("nL - " + nL);
                             }
                             
                         } else if (line.startsWith("Participants ")) {
@@ -207,9 +207,9 @@ public class PrintKeyValue {
                                     tempFN.stuL.get(i).participants = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "<>").toString();
                                 
                             } catch (Exception ex) {
-//                                System.out.println("** Error **");
-//                                System.out.println("Find - " + find);
-//                                System.out.println("nL - " + nL);
+                                System.out.println("** Error **");
+                                System.out.println("Find - " + find);
+                                System.out.println("nL - " + nL);
                             }
                         } else if (line.startsWith("Interventions ")) {
                             meth = false;
@@ -223,9 +223,9 @@ public class PrintKeyValue {
                                 if(nL.contains(find))
                                     tempFN.stuL.get(i).interventions = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "<>").toString();
                             } catch (Exception ex) {
-//                                System.out.println("** Error **");
-//                                System.out.println("Find - " + find);
-//                                System.out.println("nL - " + nL);
+                                System.out.println("** Error **");
+                                System.out.println("Find - " + find);
+                                System.out.println("nL - " + nL);
                             }
                             
                         } else if (line.startsWith("Outcomes ")) {
@@ -241,9 +241,9 @@ public class PrintKeyValue {
                                     tempFN.stuL.get(i).outcomes = new StringBuffer(nL).insert(nL.indexOf(find) + find.length(), "<>").toString();
                             }
                             catch(Exception ex){
-//                                System.out.println("** Error **");
-//                                System.out.println("Find - " +find);                                
-//                                System.out.println("nL - " +nL);                                
+                                System.out.println("** Error **");
+                                System.out.println("Find - " +find);                                
+                                System.out.println("nL - " +nL);                                
                             }
                             
                         } else if (line.startsWith("Notes ")) {
@@ -289,6 +289,44 @@ public class PrintKeyValue {
             
             //tempFN.printFName();
         }
+        
+        
+        //Printing the inner Keys and Values
+        System.out.println("\n\n%$ Par %$\n\n");
+        for (fName tempFN : fnL) {
+            for (int i = 0; i < tempFN.stuL.size(); i++) {
+                iKeyValues(tempFN.stuL.get(i).participants.replaceAll(";", "<>"));
+                printIK();
+                set = new ArrayList<String>();
+            }
+            
+        }
+        System.out.println("\n\n%$ out %$\n\n");        
+        for (fName tempFN : fnL) {
+            for (int i = 0; i < tempFN.stuL.size(); i++) {
+                iKeyValues(tempFN.stuL.get(i).outcomes);
+                printIK();
+                set = new ArrayList<String>();
+            }
+        }
+        System.out.println("\n\n%$ met %$\n\n");        
+        for (fName tempFN : fnL) {
+            for (int i = 0; i < tempFN.stuL.size(); i++) {
+                iKeyValues(tempFN.stuL.get(i).method);
+                printIK();
+                set = new ArrayList<String>();
+            }
+        }
+        System.out.println("\n\n%$ int %$\n\n");        
+        for (fName tempFN : fnL) {
+            for (int i = 0; i < tempFN.stuL.size(); i++) {
+                iKeyValues(tempFN.stuL.get(i).interventions);
+                printIK();
+                set = new ArrayList<String>();
+            }
+        }
+        //Remove this if you don't want Inner Keys
+        /*
         
         // Printing in console
         
@@ -363,6 +401,173 @@ public class PrintKeyValue {
         // Just method to check if everything is parsed
         if((MethodsL.size() + InterventionsL.size() + OutcomesL.size() + ParticipantsL.size() + FilenameL.size()) != 0)
             System.out.println("ERROR : Something not parsed");        
+                
+                
+        */
+        //Remove this if you don't want Inner Keys
+    }
+    
+    
+    // Recursive method that prints the outer keys and Inner Keys and stores them in list "set"
+    public static String iKeyValues(String g) {
+        HashMap<String, String> KeyV = new HashMap<String, String>();
+        List<String> all = new ArrayList<String>();
+        //merge
+        String ptr = g;
+        g = merge(ptr);
+
+        //prints
+//        for(String g: testC){
+//            System.out.println("\n\n ==== \n\n");
+//            String[] tokens = g.split("<>");
+//            for(String pqr : tokens)
+//                System.out.println(pqr.trim());
+//        }
+        String[] tokens = g.split("<>");
+        boolean bigDot = false;
+        for (int i = 0; i < tokens.length; i++) {
+            String str = tokens[i];
+            String noParanthesis = str.replaceAll("\\(.+?\\)", "");
+            if (noParanthesis.contains("•")) {
+                bigDot = true;
+            }
+            if (!noParanthesis.matches("//s*")) {
+                if (bigDot) {
+                    if (str.contains("•")) {
+                        str = str.replaceAll("•", "");
+                        if (str.contains(":")) {
+                            String[] inner = str.split(":");
+                            if (inner.length >= 2) {
+                                all.add("#Key");
+                                all.add(str.substring(0, str.indexOf(":")));
+                                all.add("#Value");
+                                all.add(str.substring(str.indexOf(":") + 1, str.length()));
+                            } else if (inner.length == 1) {
+                                all.add("#Key");
+                                all.add(str.trim());
+                                all.add("#Value");
+                            }
+                        } else {
+                            all.add("#Key");
+                            all.add(str.trim());
+                            all.add("#Value");
+                        }
+                    } else {
+                        String[] inner = str.split(":");
+                        if (str.contains(":") && (inner.length == 1)) {
+//                                String[] inner = str.split(":");
+//                                if (inner.length >= 2) {
+//                                    System.out.println("Key-" + str.substring(0, str.indexOf(":")));
+//                                    System.out.println("Value-" + str.substring(str.indexOf(":") + 1, str.length()));
+//                                } else if (inner.length == 1) {
+                            all.add("#Key");
+                            all.add(str.trim());
+                            all.add("#Value");
+//                                }
+                        } else {
+                            all.add(str.trim());
+                        }
+                    }
+
+                } else if (noParanthesis.contains(":")) {
+                    String[] inner = str.split(":");
+                    if (inner.length >= 2) {
+                        all.add("#Key");
+                        all.add(str.substring(0, str.indexOf(":")));
+                        all.add("#Value");
+                        all.add(str.substring(str.indexOf(":") + 1, str.length()));
+                    } else if (inner.length == 1) {
+                        all.add("#Key");
+                        all.add(str.trim());
+                        all.add("#Value");
+                    }
+                } else {
+                    all.add(str.trim());
+                }
+            }
+
+        }
+        
+        int i = 0;
+        while (i < all.size()) {
+            String str = all.get(i);
+            if (str.contains("#Key")) {
+                StringBuilder Kb = new StringBuilder();
+                StringBuilder Vb = new StringBuilder();
+                i++;
+                if (i < all.size()) {
+                    str = all.get(i);
+                }
+                if (!str.contains("#Value")) {
+                    Kb.append(str);
+                    i++;
+                }
+                if (i < all.size()) {
+                    str = all.get(i);
+                }
+                if (str.contains("#Value")) {
+                    i++;
+                    if (i < all.size()) {
+                        str = all.get(i);
+                    }
+                    while ((!str.contains("#Key")) && (i < all.size())) {
+                        Vb.append(str);
+                        Vb.append("<>");
+                        i++;
+                        if (i < all.size()) {
+                            str = all.get(i);
+                        }
+                    }
+                    i--;
+                }
+                KeyV.put(Kb.toString(), Vb.toString());
+            }
+            i++;
+        }
+//        System.out.println("==== Map Print ====");
+        if(KeyV.isEmpty()){
+            if(g.contains("<>")){
+                g = g.replaceAll("<>", "");
+            }
+            return g;
+        }
+            
+        for (Map.Entry entry : KeyV.entrySet()) {
+//            System.out.println(entry.getKey() + "\t" + entry.getValue());
+            set.add("Kee\t"+entry.getKey());
+            set.add("Valyou\t"+iKeyValues(entry.getValue().toString()));
+//            System.out.println("Key\t"+entry.getKey() );
+//            System.out.println("Value\t"+fillValues(entry.getValue().toString()));
+        }
+//        System.out.println("==== END ====");
+        return "";
+    }
+    //prints the given list into a proper format
+    public static void printIK(){
+        List<String> outerKey= new ArrayList<String>();
+        for(String str : set){
+            if(!str.matches("//s*")){
+                String[] tokens = str.split("\t");
+                if (str.contains("Kee") && tokens.length == 2) {
+                    outerKey.add(tokens[1]);
+                }
+                else if (str.contains("Valyou")) {
+                    if (tokens.length == 2) {
+                        for (String ok : outerKey) {
+                            System.out.print(ok + "\t");
+                        }
+                        System.out.print(tokens[1] + "\n");
+                        if(outerKey.size() >= 1)
+                            outerKey.remove(outerKey.size() - 1);
+                    }
+                    if (tokens.length == 1) {
+                        if(outerKey.size() >= 1)
+                            outerKey.remove(outerKey.size() - 1);
+                    }
+                }
+            }
+            
+        }
     }
     
     
@@ -638,6 +843,10 @@ public class PrintKeyValue {
             
             
             if(!str.matches("//s*")){
+                String qpr = str.replaceAll("\\(.+?\\)", "");
+                if (qpr.trim().equalsIgnoreCase("Sex") || qpr.trim().equalsIgnoreCase("Age") || qpr.trim().equalsIgnoreCase("Overall")) {
+                    str = "• " + str;
+                }
                 try {
                     if ((!str.substring(0, 1).toUpperCase().matches(str.substring(0, 1)))) {
                         sb.append(" " + str);
