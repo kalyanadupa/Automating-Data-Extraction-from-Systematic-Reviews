@@ -41,7 +41,7 @@ public class PrintKeyValue {
         HashMap<String, Integer> iKey = new HashMap<String, Integer>();
         //results_cochrane_HF.json
         System.out.println("reading");
-        String fileName = "results_cochrane_HF.json";
+        String fileName = "firstFile.json";
 //        String fileName = "results_cochrane_HF.json";
         FileReader fileReader = new FileReader(fileName);
         List<String> orderL = new ArrayList<String>();
@@ -326,10 +326,11 @@ public class PrintKeyValue {
             }
         }
         //Remove this if you don't want Inner Keys
-        /*
+        //Removed start of comment delimeter here
         
         // Printing in console
-        
+        System.out.println("First File. json Starts here ");
+                
         for (fName tempFN : fnL) {
             //tempFN.printFName();
             System.out.println("\n=====\n");
@@ -358,7 +359,7 @@ public class PrintKeyValue {
         
         
 
-        //Printing in DS
+        //Printing in Data Structure
         for (fName tempFN : fnL) {
             //tempFN.printFName();
             for (int i = 0; i < tempFN.stuL.size(); i++) {
@@ -403,7 +404,7 @@ public class PrintKeyValue {
             System.out.println("ERROR : Something not parsed");        
                 
                 
-        */
+        //Removed end of comment delimeter here
         //Remove this if you don't want Inner Keys
     }
     

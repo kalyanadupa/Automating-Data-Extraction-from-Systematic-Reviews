@@ -29,7 +29,7 @@ public class jsonP {
     public static void main(String argsv[]) throws FileNotFoundException, IOException, ParseException{
         //results_cochrane_HF.json
         System.out.println("reading");
-        String fileName = "results_cochrane_HF.json";
+        String fileName = "firstFile.json";
         FileReader fileReader = new FileReader(fileName);
         List<String> orderL = new ArrayList<String>();
         // Always wrap FileReader in BufferedReader.
