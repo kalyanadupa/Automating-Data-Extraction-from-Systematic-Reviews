@@ -34,6 +34,7 @@ import org.json.simple.parser.ParseException;
  */
 public class PrintKeyValue {
     static List<String> set= new ArrayList<String>();
+    static HashMap<String, Key> kMap = new HashMap<String, Key>();
     public static void main(String argsv[]) throws FileNotFoundException, IOException, ParseException{
         HashMap<String, Integer> pKey = new HashMap<String, Integer>();
         HashMap<String, Integer> mKey = new HashMap<String, Integer>();
@@ -360,6 +361,8 @@ public class PrintKeyValue {
         
 
         //Printing in Data Structure
+        System.out.println("031516 SKV");
+               
         for (fName tempFN : fnL) {
             //tempFN.printFName();
             for (int i = 0; i < tempFN.stuL.size(); i++) {
@@ -369,7 +372,9 @@ public class PrintKeyValue {
                 fillValues(tempFN.stuL.get(i).interventions, tempFN.stuL.get(i).iKeyV,"Intervention",iKey);
             }
         }
-
+        System.out.println("031516 EKV "+kMap.size());
+        
+        
         //Calculating keys and printing frequency
         List<Key> temp = new ArrayList<Key>();
         printFreqMap("Participants",pKey,temp);
@@ -813,9 +818,10 @@ public class PrintKeyValue {
             k = cleanKey(k);
             
             if(!k.matches("\\s*")){
-                if (!entry.getValue().toString().matches("\\s*")) {
+                if (!entry.getValue().toString().matches("\\s*")){
                     System.out.println(k + "\t" + entry.getValue() + "\t" + cat);
                     keyFreq = addKey(keyFreq, k);
+                    addValue(k,(String) entry.getValue(),cat);
                 }
             }
                 
@@ -832,6 +838,19 @@ public class PrintKeyValue {
             keyFreq.put(x, f+1);
         }
         return keyFreq;
+    }
+    
+    public static void addValue(String k,String v,String cat) {
+        Key f = kMap.get(k);
+        if (f == null) {
+            Key nK = new Key(k,cat);
+            nK.valList.add(v);
+            kMap.put(k, nK);
+            
+        } else {
+            f.valList.add(v);
+        }
+        
     }
     
     public static String merge(String g){
