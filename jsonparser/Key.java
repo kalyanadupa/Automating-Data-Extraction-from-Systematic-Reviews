@@ -18,7 +18,6 @@ public class Key {
     public String category;
     public int words;
     public List<Key> gKey;
-    public List<String> valList;
     String groupedKeys;
     
     public Key(String name1, int freq1, String category1,int words1){
@@ -38,7 +37,6 @@ public class Key {
         this.name = name1;
         this.category = category1;
         this.groupedKeys = "";
-        this.valList = new ArrayList<String>();
     }
     public Key(String name1, int freq1){
         this.name = name1;
